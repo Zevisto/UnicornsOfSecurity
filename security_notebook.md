@@ -54,7 +54,7 @@ python3 -c 'import pty; pty.spawn("/bin/bash")'
 ```
 
 ### Python extended
-```
+```python
 (victim) python3 -c "import pty; pty.spawn('/bin/bash')"
 (hacker) Ctrl+Z
 (hacker) Enter
