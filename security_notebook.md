@@ -9,7 +9,6 @@
 * [Extension Linux](#extension-linux)
 * [Exfiltration - Linux](#exfiltration-linux)
 * [IP address bypass](#ip-address-bypass)
-* [Useful Regex](#useful-regex)
 * [References](#references)
 
 ## Reverse Shell
