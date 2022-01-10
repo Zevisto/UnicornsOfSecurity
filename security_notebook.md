@@ -1,6 +1,7 @@
 * [Reverse Shell](#reverse-shell)
 * [Spawn TTY Shell](#spawn-tty-shell)
-	* [Python](#python)
+* 	* [Python](#python)
+	* [Perl](#perl)
 * [Extension Linux](#extension-linux)
 * [IP address bypass](#ip-address-bypass)
 * [Useful Regex](#useful-regex)
