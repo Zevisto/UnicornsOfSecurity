@@ -66,7 +66,7 @@ python3 -c 'import pty; pty.spawn("/bin/bash")'
 ```
 
 ### Perl
-```
+```perl
 perl -e 'exec "/bin/bash";'
 ```
 
