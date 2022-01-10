@@ -1,9 +1,33 @@
 * [Reverse Shell](#reverse-shell)
 * [Spawn TTY Shell](#spawn-tty-shell)
+	* [Python](#python)
 * [Extension Linux](#extension-linux)
 * [IP address bypass](#ip-address-bypass)
 * [Useful Regex](#useful-regex)
 * [References](#references)
+
+## Spawn TTY Shell
+### Python
+```python
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+```
+
+### Python extended
+```
+(victim) python3 -c "import pty; pty.spawn('/bin/bash')"
+(hacker) Ctrl+Z
+(hacker) Enter
+(hacker) stty raw -echo
+(hacker) fg (you will not see your keystrokes -- trust yourself and hit Enter)
+(hacker) Enter
+(hacker) Enter
+(hacker) export TERM=xterm
+```
+
+### Perl
+```
+perl -e 'exec "/bin/bash";'
+```
 
 ## IP address bypass
 ```
